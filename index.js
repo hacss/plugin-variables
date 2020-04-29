@@ -3,7 +3,7 @@ module.exports = config => {
 
   const mkPattern = property => {
     const variables = Object.keys(config[property] || {}).concat(globalVariables);
-    return new RegExp(`\\$\\((${variables.join("|")})((\\|(${variables.join("|")}))*)\\)`);
+    return new RegExp(`\\$(\\((${variables.join("|")})((\\|(${variables.join("|")}))*)\\)|(${variables.join("|")})$)`);
   };
 
   const lookup = property => (a, b) => {
@@ -14,8 +14,8 @@ module.exports = config => {
     return val;
   };
 
-  const evaluate = property => x => x
-    .substring(2, x.length - 1)
+  const evaluate = property => x =>
+    (x[1] === "(" ? x.substring(2, x.length - 1) : x.substring(1))
     .split("|")
     .reduce(lookup(property), null);
 
@@ -23,9 +23,17 @@ module.exports = config => {
     return Object
       .keys(declarations)
       .map(key => [key, declarations[key]])
-      .map(([property, value]) => {
-        return [property, value.replace(mkPattern(property), evaluate(property))];
-      })
-      .reduce((decls, [ property, value ]) => Object.assign({}, decls, { [property]: value }), {});
+      .map(([property, value]) => [
+        property,
+        value
+          .split(/\s+/)
+          .map(x => x.replace(mkPattern(property), evaluate(property)))
+          .join(" ")
+      ])
+      .reduce(
+        (decls, [ property, value ]) =>
+          Object.assign({}, decls, { [property]: value }),
+        {}
+      );
   };
 };
