@@ -1,0 +1,30 @@
+{
+  "name": "@hacss/plugin-variables",
+  "version": "1.0.0",
+  "description": "Adds variables to Hacss.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hacss/plugin-variables.git"
+  },
+  "keywords": [
+    "hacss",
+    "css",
+    "variables",
+    "preprocessor",
+    "plugin"
+  ],
+  "author": "Nick Saunders",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hacss/plugin-variables/issues"
+  },
+  "homepage": "https://hacss.io/",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.1.2"
+  }
+}
