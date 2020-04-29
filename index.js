@@ -3,7 +3,7 @@ module.exports = config => {
 
   const mkPattern = property => {
     const variables = Object.keys(config[property] || {}).concat(globalVariables);
-    return new RegExp(`\\$(\\((${variables.join("|")})((\\|(${variables.join("|")}))*)\\)|(${variables.join("|")})$)`);
+    return new RegExp(`\\$(\\((${variables.join("|")})((\\|(${variables.join("|")}))*)\\)|(${variables.join("|")}))`, "g");
   };
 
   const lookup = property => (a, b) => {
@@ -25,10 +25,7 @@ module.exports = config => {
       .map(key => [key, declarations[key]])
       .map(([property, value]) => [
         property,
-        value
-          .split(/\s+/)
-          .map(x => x.replace(mkPattern(property), evaluate(property)))
-          .join(" ")
+        value.replace(mkPattern(property), evaluate(property)),
       ])
       .reduce(
         (decls, [ property, value ]) =>

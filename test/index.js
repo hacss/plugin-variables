@@ -63,49 +63,25 @@ describe("variables plugin", () => {
     expect(actual).to.deep.equal(expected);
   });
 
-  it("always requires parens for interpolation", () => {
+  it("replaces all occurrences of variable matches", () => {
     const expected = {
-      "background-image": "blahblah$red-500.asdf",
-    };
+      "background-image": `linear-gradient(${config["red-500"]},${config["red-600"]})`,
+    };;;;
 
     const actual = plugin({
-      "background-image": "blahblah$red-500.asdf",
+      "background-image": "linear-gradient($red-500,$red-600)",
     });
 
     expect(actual).to.deep.equal(expected);
   });
 
-  it("always requires parens for pipes", () => {
+  it("requires parens for pipes", () => {
     const expected = {
+      foo: `${config["red-500"]}|darken`,
+    };
+
+    const actual = plugin({
       foo: "$red-500|darken",
-    };
-
-    const actual = plugin({
-      foo: "$red-500|darken",
-    });
-
-    expect(actual).to.deep.equal(expected);
-  });
-
-  it("doesn't require parens when entire value is a variable reference", () => {
-    const expected = {
-      foo: config["red-500"],
-    };
-
-    const actual = plugin({
-      foo: "$red-500",
-    });
-
-    expect(actual).to.deep.equal(expected);
-  });
-
-  it("doesn't require parens when entire word is a variable reference", () => {
-    const expected = {
-      padding: `${config["spacing1"]} ${config["spacing1"]}`,
-    };
-
-    const actual = plugin({
-      padding: "$spacing1 $spacing1",
     });
 
     expect(actual).to.deep.equal(expected);
