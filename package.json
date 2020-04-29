@@ -26,5 +26,8 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^7.1.2"
+  },
+  "peerDependencies": {
+    "hacss": ">=1.0.12 <3.0.0"
   }
 }
