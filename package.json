@@ -1,6 +1,6 @@
 {
   "name": "@hacss/plugin-variables",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Adds variables to Hacss.",
   "main": "dist/hacss-plugin-variables.umd.js",
   "scripts": {
