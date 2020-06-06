@@ -8,7 +8,7 @@ export default config => {
       globalVariables,
     );
     return new RegExp(
-      `\\$(\\((${variables.join("|")})((\\|(${variables.join(
+      `\\$(\\(('[^']+'|"[^"]+"|${variables.join("|")})((\\|(${variables.join(
         "|",
       )}))*)\\)|(${variables.join("|")}))`,
       "g",
@@ -16,7 +16,14 @@ export default config => {
   };
 
   const lookup = property => (a, b) => {
-    const val = (config[property] || {})[b] || config[b];
+    let val;
+    if (/'[^']+'|"[^"]+"/.test(b)) {
+      val = b.substring(1, b.length - 1);
+    } else if (config[property] && config[property][b]) {
+      val = config[property][b];
+    } else {
+      val = config[b];
+    }
     if (typeof val === "function") {
       return val(a);
     }
@@ -25,7 +32,7 @@ export default config => {
 
   const evaluate = property => x =>
     (x[1] === "(" ? x.substring(2, x.length - 1) : x.substring(1))
-      .split("|")
+      .match(/'[^']+'|"[^"]+"|[^|]+/g)
       .reduce(lookup(property), null);
 
   return declarations => {

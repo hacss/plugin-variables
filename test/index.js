@@ -16,7 +16,7 @@ const spec = {
 
   spacing1: "4px",
 
-  darken: x => ("#f00" ? "#e60000" : x),
+  darken: x => (spec["red-500"] ? spec["red-600"] : x),
   "url-encode": encodeURIComponent,
 };
 
@@ -76,6 +76,17 @@ test(
   }),
   {
     foo: `${spec["red-500"]}|darken`,
+  },
+);
+
+test(
+  execVars({
+    foo: `$('${spec["red-500"]}'|darken)`,
+    bar: `$("${spec["red-500"]}"|darken)`,
+  }),
+  {
+    foo: spec["red-600"],
+    bar: spec["red-600"],
   },
 );
 
